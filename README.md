@@ -46,6 +46,7 @@ The program accepts a few program arguments:
 --gc-ip=...            the IP on which the application tries to connect to the Game Controller [default = 127.0.0.1]
 --gc-port=...          the port on which the application tries to connect to the Game Controller [default = 10007]
 --active               if the application should start in active mode instead of passive [default = passive]
+--cli                  run in headless mode
 ```
 
 When running using gradle, these arguments can be specified in the following way:
