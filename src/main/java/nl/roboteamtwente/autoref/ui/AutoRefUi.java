@@ -18,9 +18,12 @@ public class AutoRefUi extends Application {
         Parent root = fxmlLoader.load();
         controller = fxmlLoader.getController();
 
-        primaryStage.setTitle("RoboTeam Twente: AutoRef");
-        primaryStage.setScene(new Scene(root, 640, 480));
-        primaryStage.show();
+        if(!getParameters().getUnnamed().contains("--cli"))
+        {
+            primaryStage.setTitle("RoboTeam Twente: AutoRef");
+            primaryStage.setScene(new Scene(root, 640, 480));
+            primaryStage.show();
+        }
 
         controller.start(getParameters());
     }
