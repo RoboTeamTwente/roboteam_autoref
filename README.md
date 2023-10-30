@@ -28,11 +28,6 @@ JRE 17 using the following command:
 sudo apt install openjdk-17-jre -y
 ```
 
-Next, make sure the `gradlew` file is executable:
-```
-chmod +x ./gradlew
-```
-
 Finally, you can use Gradle to run the application:
 ```
 ./gradlew run
