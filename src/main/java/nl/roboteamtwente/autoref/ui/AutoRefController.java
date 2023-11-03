@@ -15,11 +15,13 @@ import javafx.scene.text.TextFlow;
 import nl.roboteamtwente.autoref.SSLAutoRef;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AutoRefController implements Initializable {
     private SSLAutoRef sslAutoRef;
+    private boolean isHeadless;
 
     @FXML
     public ComboBox<String> modeBox;
@@ -42,6 +44,7 @@ public class AutoRefController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sslAutoRef = new SSLAutoRef();
+
         canvas.setSslAutoRef(sslAutoRef);
 
         sslAutoRef.setOnViolation((violation) -> {
@@ -51,11 +54,12 @@ public class AutoRefController implements Initializable {
 
             Text timeText = new Text("[" + timeString + "] ");
             timeText.setStyle("-fx-font-weight: bold");
-
-            Platform.runLater(() -> {
-                logList.getItems().add(new TextFlow(timeText, new Text(violation.toString())));
-                logList.scrollTo(logList.getItems().size() - 1);
-            });
+            if(!isHeadless){
+                Platform.runLater(() -> {
+                    logList.getItems().add(new TextFlow(timeText, new Text(violation.toString())));
+                    logList.scrollTo(logList.getItems().size() - 1);
+                });
+            }
         });
 
         modeBox.getItems().addAll("Passive", "Active");
@@ -78,19 +82,31 @@ public class AutoRefController implements Initializable {
         anim.start();
     }
 
-    public void start(Application.Parameters parameters) {
+    public void initialize_headless() {
+        sslAutoRef = new SSLAutoRef();
+
+        sslAutoRef.setOnViolation((violation) -> {
+            double time = sslAutoRef.getReferee().getGame().getTime();
+            String timeString = String.format("%d:%05.2f", (int) (time / 60), time % 60);
+            System.out.println("[" + timeString + "] " + violation);
+
+            Text timeText = new Text("[" + timeString + "] ");
+            timeText.setStyle("-fx-font-weight: bold");
+        });
+    }
+
+    public void start(String ipWorld, String portWorld, String ipGameController, 
+                        String portGameController, boolean active, boolean headless) {
         try {
-            String ipWorld = parameters.getNamed().getOrDefault("world-ip", "127.0.0.1");
-            String ipGameController = parameters.getNamed().getOrDefault("gc-ip", "127.0.0.1");
-            int portWorld = Integer.parseInt(parameters.getNamed().getOrDefault("world-port", "5558"));
-            int portGameController = Integer.parseInt(parameters.getNamed().getOrDefault("gc-port", "10007"));
-
-            boolean active = parameters.getUnnamed().contains("--active");
-
-            modeBox.setValue(active ? "Active" : "Passive");
-
+            setHeadless(headless);
+            if(!isHeadless){
+                modeBox.setValue(active ? "Active" : "Passive");
+            }
             sslAutoRef.setActive(active);
-            sslAutoRef.start(ipWorld, ipGameController, portWorld, portGameController);
+            sslAutoRef.start(ipWorld, ipGameController,
+                            Integer.valueOf(portWorld),
+                            Integer.valueOf(portGameController));
+
         } catch (NumberFormatException e) {
             System.err.println("Failed to parse port program argument.");
             System.exit(1);
@@ -99,5 +115,9 @@ public class AutoRefController implements Initializable {
 
     public void stop() {
         sslAutoRef.stop();
+    }
+
+    private void setHeadless(boolean headless){
+        isHeadless=headless;
     }
 }
