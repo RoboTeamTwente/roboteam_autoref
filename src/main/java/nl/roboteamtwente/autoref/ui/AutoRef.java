@@ -21,9 +21,9 @@ public class AutoRef {
         options.addOption(gcip_opt);
         Option gcport_opt = new Option("gcp", "gc-port", true, "game controller port");
         options.addOption(gcport_opt);
-        Option active_opt = new Option("active", "active or passive mode");
-        active_opt.setRequired(false);
-        options.addOption(active_opt);
+        Option nogc_opt = new Option("nogc", "automatically connect or no connection to Game Controller");
+        nogc_opt.setRequired(false);
+        options.addOption(nogc_opt);
         Option headless_opt = new Option("cli", "headless mode");
         headless_opt.setRequired(false);
         options.addOption(headless_opt);
@@ -43,19 +43,19 @@ public class AutoRef {
         String wp = cmd.getOptionValue("wp","5558");
         String gcip = cmd.getOptionValue("gcip","127.0.0.1");
         String gcport = cmd.getOptionValue("gcp","10007");
-        boolean active = cmd.hasOption("active");
+        boolean nogc = cmd.hasOption("nogc");
         boolean headless = cmd.hasOption("cli");
 
         if(headless){
             System.out.println("Running Headless");
             controller = new AutoRefController();
             controller.initialize_headless();
-            controller.start(wip,wp,gcip,gcport,active,headless);
+            controller.start(wip,wp,gcip,gcport,nogc,headless);
         }
         else
         {
             Application.launch(AutoRefUi.class,wip,wp,gcip,gcport,
-                            String.valueOf(active),String.valueOf(headless));
+                            String.valueOf(nogc),String.valueOf(headless));
         }
     }
 }
