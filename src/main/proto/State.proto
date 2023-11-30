@@ -7,8 +7,7 @@ import "ssl_vision_wrapper.proto";
 import "ssl_gc_referee_message.proto";
 import "ssl_vision_geometry.proto";
 
-import "Handshake.proto";
-import "UiOptions.proto";
+import "RobotFeedback.proto";
 
 package proto;
 option java_package = "nl.roboteamtwente.proto";
@@ -20,12 +19,8 @@ message State {
     TeamParameters blue_robot_parameters = 4;
     TeamParameters yellow_robot_parameters = 5;
     SSL_GeometryData field = 6; //TODO: later change to a custom field type
-    SSL_Referee referee = 7; //TODO: later change to a custom referee type
+    Referee referee = 7; //TODO: later change to a custom referee type
     repeated SSL_WrapperPacket processed_vision_packets = 10;
-    repeated SSL_Referee processed_referee_packets = 11;
-}
-
-message ModuleState {
-    State system_state = 1;
-    repeated Handshake handshakes = 2;
+    repeated Referee processed_referee_packets = 11;
+    repeated RobotsFeedback processed_feedback_packets = 12;
 }

@@ -35,12 +35,12 @@ public class Game {
     /**
      * The received next command from referee packet
      */
-    private SslGcRefereeMessage.SSL_Referee.Command nextCommand;
+    private SslGcRefereeMessage.Referee.Command nextCommand;
 
     /**
      * The received command from referee packet
      */
-    private SslGcRefereeMessage.SSL_Referee.Command command;
+    private SslGcRefereeMessage.Referee.Command command;
 
     /**
      * The game consists of 2 teams blue and yellow
@@ -158,19 +158,19 @@ public class Game {
                 '}';
     }
 
-    public SslGcRefereeMessage.SSL_Referee.Command getCommand() {
+    public SslGcRefereeMessage.Referee.Command getCommand() {
         return this.command;
     }
 
-    public SslGcRefereeMessage.SSL_Referee.Command getNextCommand() {
+    public SslGcRefereeMessage.Referee.Command getNextCommand() {
         return this.nextCommand;
     }
 
-    public void setCommand(SslGcRefereeMessage.SSL_Referee.Command command) {
+    public void setCommand(SslGcRefereeMessage.Referee.Command command) {
         this.command = command;
     }
 
-    public void setNextCommand(SslGcRefereeMessage.SSL_Referee.Command command) {
+    public void setNextCommand(SslGcRefereeMessage.Referee.Command command) {
         this.nextCommand = command;
     }
 

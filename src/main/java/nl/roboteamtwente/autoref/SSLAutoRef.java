@@ -130,7 +130,7 @@ public class SSLAutoRef {
 
         //check if game state needs to be set to running
         if (statePacket.getReferee().hasCurrentActionTimeRemaining()) {
-            int timeRemaining = statePacket.getReferee().getCurrentActionTimeRemaining();
+            long timeRemaining = statePacket.getReferee().getCurrentActionTimeRemaining();
             if (timeRemaining < 0) {
                 if (game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) {
                     game.setState(GameState.RUN);

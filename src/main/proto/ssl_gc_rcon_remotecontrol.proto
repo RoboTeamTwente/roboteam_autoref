@@ -63,6 +63,9 @@ message ControllerToRemoteControl {
 
 // Current team state from Controller for remote control
 message RemoteControlTeamState {
+    // the team that is controlled
+    optional Team team = 12;
+
     // list of all currently available request types that can be made
     repeated RemoteControlRequestType available_requests = 1;
 
@@ -93,6 +96,9 @@ message RemoteControlTeamState {
 
     // list of due times for each active yellow card (in seconds)
     repeated float yellow_cards_due = 8;
+
+    // if true, team is allowed to substitute robots
+    optional bool can_substitute_robot = 11;
 }
 
 // All possible request types that the remote control can make

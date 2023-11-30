@@ -57,12 +57,12 @@ public class PlacementSucceededValidator implements RuleValidator {
      * @return true if the next command is for the placing team
      */
     private boolean isNextCommandForPlacingTeam(Game game) {
-        if (game.getCommand() == SslGcRefereeMessage.SSL_Referee.Command.BALL_PLACEMENT_BLUE) {
-            return game.getNextCommand() == SslGcRefereeMessage.SSL_Referee.Command.DIRECT_FREE_BLUE
-                    || game.getNextCommand() == SslGcRefereeMessage.SSL_Referee.Command.INDIRECT_FREE_BLUE;
-        } else if (game.getCommand() == SslGcRefereeMessage.SSL_Referee.Command.BALL_PLACEMENT_YELLOW) {
-            return game.getNextCommand() == SslGcRefereeMessage.SSL_Referee.Command.DIRECT_FREE_YELLOW
-                    || game.getNextCommand() == SslGcRefereeMessage.SSL_Referee.Command.INDIRECT_FREE_YELLOW;
+        if (game.getCommand() == SslGcRefereeMessage.Referee.Command.BALL_PLACEMENT_BLUE) {
+            return game.getNextCommand() == SslGcRefereeMessage.Referee.Command.DIRECT_FREE_BLUE
+                    || game.getNextCommand() == SslGcRefereeMessage.Referee.Command.INDIRECT_FREE_BLUE;
+        } else if (game.getCommand() == SslGcRefereeMessage.Referee.Command.BALL_PLACEMENT_YELLOW) {
+            return game.getNextCommand() == SslGcRefereeMessage.Referee.Command.DIRECT_FREE_YELLOW
+                    || game.getNextCommand() == SslGcRefereeMessage.Referee.Command.INDIRECT_FREE_YELLOW;
         }
         return false;
     }
