@@ -12,6 +12,11 @@ public class Robot extends Entity {
     private final int id;
 
     /**
+     * Maximum radius of the robot in meters
+     */
+    private final double radius = 0.09;
+
+    /**
      * A robot has an angle that it is facing during any point of the game.
      */
     private float angle;
@@ -123,6 +128,13 @@ public class Robot extends Entity {
         return new RobotIdentifier(team.getColor(), id);
     }
 
+    /**
+     * 
+     * @return radius of robot
+     */
+    public double getRadius() {
+        return radius;
+    }
 
     /**
      *
