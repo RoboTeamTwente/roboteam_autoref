@@ -27,6 +27,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
      * @param p1 - first point of the line
      * @param p2 - second point of the line
      * @param p3 - the point to calculate distance to the line
+     * @param robot - robot
      * @return the distance between the point 3 and the line defined by point 1 and 2
      */
     public boolean calculateDistancePointToLine(Vector2 p1, Vector2 p2, Vector2 p3, Robot robot) {
@@ -39,7 +40,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
 
         // If distance from p3 to p1 or p2 < threshold then it's a violation
         // Step1: Circle check
-        if ((p3.distance(p2) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
+        if ((p3.distance(p1) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
             return true;
         }
 
