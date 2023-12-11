@@ -23,7 +23,7 @@ public class SSLAutoRef {
     private WorldConnection worldConnection;
 
     private Consumer<RuleViolation> onViolation;
-    private boolean active = false;
+    private boolean autoConnect = false;
 
     private int commands = 0;
     private int nextTouchId = 0;
@@ -378,7 +378,7 @@ public class SSLAutoRef {
         gcConnection = new GameControllerConnection();
         gcConnection.setIp(ipGameController);
         gcConnection.setPort(portGameController);
-        gcConnection.setActive(active);
+        gcConnection.setAutoConnect(autoConnect);
         gcThread = new Thread(gcConnection);
         gcThread.start();
 
@@ -403,14 +403,14 @@ public class SSLAutoRef {
                 onViolation.accept(violation);
             }
 
-            if (isActive()) {
+            if (isAutoConnect()) {
                 gcConnection.addToQueue(violation.toPacket());
             }
         }
     }
 
     public void stop() {
-        gcConnection.setActive(false);
+        gcConnection.setAutoConnect(false);
         try {
             //make sure sleep is longer than any sleep in GameControllerConnection.java
             Thread.sleep(gcConnection.getReconnectSleep() + 3000);
@@ -426,16 +426,16 @@ public class SSLAutoRef {
         this.onViolation = onViolation;
     }
 
-    public void setActive(boolean active) {
+    public void setAutoConnect(boolean autoConnect) {
         if (gcConnection != null) {
-            gcConnection.setActive(active);
+            gcConnection.setAutoConnect(autoConnect);
         }
 
-        this.active = active;
+        this.autoConnect = autoConnect;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isAutoConnect() {
+        return autoConnect;
     }
 
     public Referee getReferee() {

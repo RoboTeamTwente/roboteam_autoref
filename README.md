@@ -36,17 +36,17 @@ Finally, you can use Gradle to run the application:
 ### Program Arguments
 The program accepts a few program arguments:
 ```
--active					if the application should start in active mode instead of passive [default = passive]
+-nogc					turn off the connection to the Game Controller, used for testing without the Game Controller
 -cli					run in headless mode
--gpip=<value>,--gc-ip=<value>		the IP on which the application tries to connect to the Game Controller [default = 127.0.0.1]
--gcp=<value>,--gc-port=<value>          the port on which the application tries to connect to the Game Controller [default = 10007]
--wip=<value>,--world-ip=<value>		the IP on which the application tries to connect to the RoboTeam World Observer to [default = 127.0.0.1]
--wp=<value>,--world-port=<value>	the port on which the application tries to connect to the RoboTeam World Observer to [default = 5558]
+-gpip <value>,--gc-ip <value>		the IP on which the application tries to connect to the Game Controller [default = 127.0.0.1]
+-gcp <value>,--gc-port <value>          the port on which the application tries to connect to the Game Controller [default = 10007]
+-wip <value>,--world-ip <value>		the IP on which the application tries to connect to the RoboTeam World Observer to [default = 127.0.0.1]
+-wp <value>,--world-port <value>	the port on which the application tries to connect to the RoboTeam World Observer to [default = 5558]
 ```
 
 When running using gradle, these arguments can be specified in the following way:
 ```bash
-./gradlew run --args="-active"
+./gradlew run --args="-cli -gcp 8642"
 ```
 
 ## Rules

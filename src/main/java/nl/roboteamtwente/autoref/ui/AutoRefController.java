@@ -62,10 +62,10 @@ public class AutoRefController implements Initializable {
             }
         });
 
-        modeBox.getItems().addAll("Passive", "Active");
+        modeBox.getItems().addAll("No GameController Connection", "Automatically Connect");
 
         modeBox.setOnAction((event) -> {
-            sslAutoRef.setActive(Objects.equals(modeBox.getValue(), "Active"));
+            sslAutoRef.setAutoConnect(Objects.equals(modeBox.getValue(), "Automatically Connect"));
         });
 
         clearButton.setOnAction((event) -> {
@@ -96,13 +96,13 @@ public class AutoRefController implements Initializable {
     }
 
     public void start(String ipWorld, String portWorld, String ipGameController, 
-                        String portGameController, boolean active, boolean headless) {
+                        String portGameController, boolean noGC, boolean headless) {
         try {
             setHeadless(headless);
             if(!isHeadless){
-                modeBox.setValue(active ? "Active" : "Passive");
+                modeBox.setValue(noGC ? "No GameController Connection" : "Automatically Connect");
             }
-            sslAutoRef.setActive(active);
+            sslAutoRef.setAutoConnect(!noGC);
             sslAutoRef.start(ipWorld, ipGameController,
                             Integer.valueOf(portWorld),
                             Integer.valueOf(portGameController));

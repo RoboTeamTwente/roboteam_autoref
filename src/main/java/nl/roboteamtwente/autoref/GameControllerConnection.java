@@ -18,7 +18,7 @@ public class GameControllerConnection implements Runnable {
     private String ip;
     private int port;
     private List<SslGcGameEvent.GameEvent> queue = new ArrayList<>();
-    private boolean active;
+    private boolean autoConnect;
     //time between attempts to reconnect (in ms)
     private final int reconnectSleep = 1000;
 
@@ -102,7 +102,7 @@ public class GameControllerConnection implements Runnable {
                         System.out.println(e.getMessage());
                     }
                 }
-            } else if (active) {
+            } else if (autoConnect) {
                 reconnect();
             }
             //small delay to not always check queue but check in intervals
@@ -130,7 +130,7 @@ public class GameControllerConnection implements Runnable {
      * Reconnect
      */
     private synchronized void reconnect() {
-        System.out.println("Reconnecting");
+        System.out.println("Reconnecting to port " + port);
         queue.clear();
         try {
             if (this.socket != null) {
@@ -139,7 +139,7 @@ public class GameControllerConnection implements Runnable {
 
             this.socket = null;
             this.signature = null;
-            if (active) {
+            if (autoConnect) {
                 this.connect();
             }
         } catch (InterruptedException | IOException e) {
@@ -182,8 +182,8 @@ public class GameControllerConnection implements Runnable {
                 .setPkcs1V15(ByteString.copyFrom(signature.sign())).build();
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setAutoConnect(boolean autoConnect) {
+        this.autoConnect = autoConnect;
     }
 
     /**
@@ -234,7 +234,7 @@ public class GameControllerConnection implements Runnable {
     @Override
     public void run() {
         try {
-            if (active) {
+            if (autoConnect) {
                 this.connect();
             }
             this.processQueue();
