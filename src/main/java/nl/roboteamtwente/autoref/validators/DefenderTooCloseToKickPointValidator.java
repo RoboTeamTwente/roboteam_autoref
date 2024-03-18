@@ -42,7 +42,7 @@ public class DefenderTooCloseToKickPointValidator implements RuleValidator {
             Vector2 robotPos = robot.getPosition().xy();
 
             // Calculate distance to ball
-            float distanceToBall = ball.distance(robotPos) - (float) robot.getRadius();
+            float distanceToBall = ball.distance(robotPos) - robot.getRadius();
 
             // If robot is within 0.5m of the ball, it is too close
             if (distanceToBall < 0.5) {

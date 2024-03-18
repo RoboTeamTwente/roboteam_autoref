@@ -86,10 +86,10 @@ public class AttackerTooCloseToDefenseAreaValidator implements RuleValidator {
 
                     if (abs(robotY) - robot.getRadius() < abs(lineY)) {
                         // Robot is in front of the line
-                        distance = lineX - (robotX + (float) robot.getRadius());
+                        distance = lineX - (robotX + robot.getRadius());
                     } else if (robotX > lineX) {
                         // Robot is above or below the defender area, within 0.2m
-                        distance = abs(robotY) - (float) robot.getRadius() - abs(lineY);
+                        distance = abs(robotY) - robot.getRadius() - abs(lineY);
                     }
 
                     // Check if robot is within one of the corners and calculate distance to the corner
