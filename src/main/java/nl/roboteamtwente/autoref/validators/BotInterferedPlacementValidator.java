@@ -27,9 +27,10 @@ public class BotInterferedPlacementValidator implements RuleValidator {
      * @param p1 - first point of the line
      * @param p2 - second point of the line
      * @param p3 - the point to calculate distance to the line
+     * @param robot - robot
      * @return the distance between the point 3 and the line defined by point 1 and 2
      */
-    public boolean calculateDistancePointToLine(Vector2 p1, Vector2 p2, Vector2 p3) {
+    public boolean calculateDistancePointToLine(Vector2 p1, Vector2 p2, Vector2 p3, Robot robot) {
         double x1 = p1.getX();
         double y1 = p1.getY();
         double x2 = p2.getX();
@@ -39,7 +40,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
 
         // If distance from p3 to p1 or p2 < threshold then it's a violation
         // Step1: Circle check
-        if ((p3.distance(p2) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
+        if ((p3.distance(p1) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
             return true;
         }
 
@@ -70,7 +71,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
             double numerator = Math.abs(a1 * x3 + b1 * y3 + c1);
             double denominator = Math.sqrt(a1 * a1 + b1 * b1);
             double distance = numerator / denominator;
-            if (distance < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) {
+            if (distance - robot.getRadius() < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) {
                 return true;
             }
         }
@@ -127,7 +128,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
                 Vector2 robotPos = robot.getPosition().xy();
                 Vector2 placementPos = game.getDesignatedPosition();
                 Vector2 ballPos = game.getBall().getPosition().xy();
-                if (calculateDistancePointToLine(ballPos, placementPos, robotPos)) {
+                if (calculateDistancePointToLine(ballPos, placementPos, robotPos, robot)) {
                     if (checkViolation(robot.getIdentifier(), game.getTime())) {
                         Vector2 roundRobotPos = new Vector2(roundFloatTo1DecimalPlace(robot.getPosition().getX()), roundFloatTo1DecimalPlace(robot.getPosition().getY()));
                         return new BotInterferedPlacementValidator.BotInterferedPlacementViolation(robot.getTeam().getColor(), robot.getId(), roundRobotPos, ballPos, placementPos);
