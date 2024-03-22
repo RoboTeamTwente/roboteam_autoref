@@ -26,9 +26,9 @@ public class BotDribbledBallTooFarValidator implements RuleValidator {
         }
 
         for (Touch touch : game.getFinishedTouches()) {
-            Vector2 startLocation = touch.startLocation().xy();
-            Vector2 endLocation = touch.endLocation().xy();
-            Robot robot = game.getRobot(touch.by());
+            Vector2 startLocation = touch.getStartLocation().xy();
+            Vector2 endLocation = touch.getEndLocation().xy();
+            Robot robot = game.getRobot(touch.getBy());
             float dist = startLocation.distance(endLocation);
 
             if (dist <= 1) {

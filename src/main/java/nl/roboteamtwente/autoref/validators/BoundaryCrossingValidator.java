@@ -32,7 +32,7 @@ public class BoundaryCrossingValidator implements RuleValidator {
 
             triggered = true;
             if (touch != null) {
-                Robot byBot = game.getRobot(touch.by());
+                Robot byBot = game.getRobot(touch.getBy());
                 return new Violation(byBot.getTeam().getColor(), location);
             } else {
                 return new Violation(null, location);

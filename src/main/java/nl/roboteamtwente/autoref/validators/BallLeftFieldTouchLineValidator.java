@@ -39,7 +39,7 @@ public class BallLeftFieldTouchLineValidator implements RuleValidator {
                 return null;
             }
 
-            RobotIdentifier byBot = game.getLastStartedTouch().by();
+            RobotIdentifier byBot = game.getLastStartedTouch().getBy();
             if (game.getTime() - lastViolations > GRACE_PERIOD) {
                 lastViolations = game.getTime();
                 return new Violation(byBot.teamColor(), byBot.id(), ball.xy());

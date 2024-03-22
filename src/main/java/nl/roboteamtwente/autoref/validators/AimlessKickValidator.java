@@ -30,24 +30,24 @@ public class AimlessKickValidator implements RuleValidator {
         }
 
         //Get the last robot who made the last touch
-        Robot byBot = game.getRobot(touch.by());
+        Robot byBot = game.getRobot(touch.getBy());
 
         //Check if the bot retrieved was in their own half before the ball went out.
-        if (game.getField().isInOwnHalf(byBot.getTeam().getSide(), touch.endLocation().xy())
+        if (game.getField().isInOwnHalf(byBot.getTeam().getSide(), touch.getEndLocation().xy())
                 && game.getTime() - lastViolation > GRACE_PERIOD) {
 
             //If the ball left the right goal line and the side of the bot was left then an aimless kick happened.
             if (game.getBall().getPosition().getX() > rightGoalLine.p1().getX()
                     && byBot.getTeam().getSide() == Side.LEFT) {
                 lastViolation = game.getTime();
-                return new Violation(byBot.getTeam().getColor(), byBot.getId(), game.getBall().getPosition().xy(), touch.endLocation().xy());
+                return new Violation(byBot.getTeam().getColor(), byBot.getId(), game.getBall().getPosition().xy(), touch.getEndLocation().xy());
             }
 
             //If the ball left the left goal line and the side of the bot was right then an aimless kick happened.
             if (game.getBall().getPosition().getX() < leftGoalLine.p1().getX()
                     && byBot.getTeam().getSide() == Side.RIGHT) {
                 lastViolation = game.getTime();
-                return new Violation(byBot.getTeam().getColor(), byBot.getId(), game.getBall().getPosition().xy(), touch.endLocation().xy());
+                return new Violation(byBot.getTeam().getColor(), byBot.getId(), game.getBall().getPosition().xy(), touch.getEndLocation().xy());
             }
         }
 

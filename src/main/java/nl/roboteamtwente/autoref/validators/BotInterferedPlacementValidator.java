@@ -39,7 +39,7 @@ public class BotInterferedPlacementValidator implements RuleValidator {
 
         // If distance from p3 to p1 or p2 < threshold then it's a violation
         // Step1: Circle check
-        if ((p3.distance(p2) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
+        if ((p3.distance(p1) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT) || (p3.distance(p2) < MIN_DISTANCE_BETWEEN_ROBOT_AND_PLACEMENT)) {
             return true;
         }
 
