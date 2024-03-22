@@ -78,25 +78,25 @@ public class AttackerTooCloseToDefenseAreaValidator implements RuleValidator {
             }
 
             // Check if robot's X is within 0.2 m of the defender area
-            if (robotX > lineX - MAX_DISTANCE) {
+            if (robotX + robot.getRadius() > lineX - MAX_DISTANCE) {
 
                 // Check if robot's Y is also within 0.2m of the defender area
                 // Can use the absolute value of the Y position as the Y coordinate is mirrored from the middle line of the field
-                if (abs(robotY) < abs(lineY) + MAX_DISTANCE) {
+                if (abs(robotY) - robot.getRadius() < abs(lineY) + MAX_DISTANCE) {
 
-                    if (abs(robotY) < abs(lineY)) {
+                    if (abs(robotY) - robot.getRadius() < abs(lineY)) {
                         // Robot is in front of the line
-                        distance = lineX - robotX;
+                        distance = lineX - (robotX + robot.getRadius());
                     } else if (robotX > lineX) {
                         // Robot is above or below the defender area, within 0.2m
-                        distance = abs(robotY) - abs(lineY);
+                        distance = abs(robotY) - robot.getRadius() - abs(lineY);
                     }
 
                     // Check if robot is within one of the corners and calculate distance to the corner
                     // Can get either p1 or p2, they should have the same coordinates when taken the absolute Y value
-                    if (robotX < lineX && abs(robotY) > abs(lineY)) {
+                    if (robotX < lineX && abs(robotY) - robot.getRadius() > abs(lineY)) {
                         // Robot is in one of the corners, use pythagorean theorem to get distance to that corner
-                        distance = (float) Math.sqrt(Math.pow(lineX - robotX, 2) + Math.pow(abs(lineY) - abs(robotY), 2));
+                        distance = (float) (Math.sqrt(Math.pow(lineX - robotX, 2) + Math.pow(abs(lineY) - abs(robotY), 2)) - robot.getRadius());
                         if (distance > MAX_DISTANCE) {
                             // Robot is not within 0.2m of the corner, so check next robot
                             continue;

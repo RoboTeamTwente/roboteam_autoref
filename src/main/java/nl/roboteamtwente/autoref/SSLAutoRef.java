@@ -54,11 +54,11 @@ public class SSLAutoRef {
         deriveRefereeMessage(game, statePacket);
         deriveBall(game, world);
         for (WorldRobotOuterClass.WorldRobot robot : world.getBlueList()) {
-            deriveRobot(game, TeamColor.BLUE, robot);
+            deriveRobot(game, TeamColor.BLUE, robot, statePacket);
         }
 
         for (WorldRobotOuterClass.WorldRobot robot : world.getYellowList()) {
-            deriveRobot(game, TeamColor.YELLOW, robot);
+            deriveRobot(game, TeamColor.YELLOW, robot, statePacket);
         }
         deriveTeamData(game, statePacket);
         deriveField(game, statePacket);
@@ -194,7 +194,7 @@ public class SSLAutoRef {
      * @param teamColor  team color
      * @param worldRobot robot
      */
-    private void deriveRobot(Game game, TeamColor teamColor, WorldRobotOuterClass.WorldRobot worldRobot) {
+    private void deriveRobot(Game game, TeamColor teamColor, WorldRobotOuterClass.WorldRobot worldRobot, StateOuterClass.State statePacket) {
         Robot robot = game.getTeam(teamColor).getRobotById(worldRobot.getId());
         if (robot == null) {
             robot = new Robot(worldRobot.getId());
@@ -206,6 +206,12 @@ public class SSLAutoRef {
         robot.getPosition().setY(worldRobot.getPos().getY());
         robot.getVelocity().setX(worldRobot.getVel().getX());
         robot.getVelocity().setY(worldRobot.getVel().getY());
+        if (teamColor == TeamColor.BLUE) {
+            robot.setRadius(statePacket.getBlueRobotParameters().getParameters().getRadius());
+            System.out.println(robot.getRadius());
+        } else {
+            robot.setRadius(statePacket.getYellowRobotParameters().getParameters().getRadius());
+        }
         robot.setAngle(worldRobot.getAngle());
     }
 
