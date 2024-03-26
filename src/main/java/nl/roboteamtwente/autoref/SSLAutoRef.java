@@ -208,7 +208,6 @@ public class SSLAutoRef {
         robot.getVelocity().setY(worldRobot.getVel().getY());
         if (teamColor == TeamColor.BLUE) {
             robot.setRadius(statePacket.getBlueRobotParameters().getParameters().getRadius());
-            System.out.println(robot.getRadius());
         } else {
             robot.setRadius(statePacket.getYellowRobotParameters().getParameters().getRadius());
         }
@@ -273,7 +272,9 @@ public class SSLAutoRef {
                 game.getTouches().add(touch);
             }
         }
-        game.getTouches().add(game.getPrevious().getLastFinishedTouch());
+        if (game.getPrevious().getLastFinishedTouch() != null) {
+            game.getTouches().add(game.getPrevious().getLastFinishedTouch());
+        }
 
         Ball ball = game.getBall();
         Vector3 ballPosition = ball.getPosition();
