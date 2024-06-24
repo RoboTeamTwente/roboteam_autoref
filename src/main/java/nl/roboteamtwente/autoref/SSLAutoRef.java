@@ -350,11 +350,10 @@ public class SSLAutoRef {
             }
 
             // to conclude, we add the touch to the game
-            if (touch != null) {
+            if (touch != null && !game.getTouches().contains(touch)) {
                 game.getTouches().add(touch);
             }
         }
-
     }
 
     /**
