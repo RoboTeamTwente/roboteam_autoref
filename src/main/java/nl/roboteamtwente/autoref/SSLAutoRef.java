@@ -280,6 +280,18 @@ public class SSLAutoRef {
         Vector3 ballPosition = ball.getPosition();
         int robotsCloseToBall = 0;
 
+        //check if ball has randomly teleported
+        if (game.getBall().getLastTouchStarted() != null && !game.getBall().getLastTouchStarted().isFinished()) { // a robot is still touching the ball
+            Ball ball_ = game.getBall();
+            Touch touch_ = ball_.getLastTouchStarted();
+            Robot robot_ = game.getRobot(touch_.getBy());
+            System.out.printf("\n[ball x, ball y, robot x, robot y, distance]: %.3f, %.3f, %.3f, %.3f, %.3f\n", 
+            //if distance between robot and ball is greater than 15m/s * 60Hz + robot radius there is a false positive
+            if (ball_.getPosition().xy().distance(robot_.getPosition().xy()) > (15 * 1/60 + robot_.getRadius())) {
+                return;
+            }
+        }
+
         //find out how many robots are within 0.25m (needs testing to find out what range is effective)
         for (Robot robot : game.getRobots()) {
             if(robot.getPosition().xy().distance(ballPosition.xy()) < 0.25) {
