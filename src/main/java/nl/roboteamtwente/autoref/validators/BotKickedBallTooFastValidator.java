@@ -32,7 +32,7 @@ public class BotKickedBallTooFastValidator implements RuleValidator {
 
         // If speed in one frame is higher than 6.5 m/s, ball was kicked too fast by the bot.
         if (speed > 6.5) {
-            RobotIdentifier robotID = game.getLastStartedTouch().by();
+            RobotIdentifier robotID = game.getLastStartedTouch().getBy();
             TeamColor team = robotID.teamColor();
             Vector2 location = ball.getPosition().xy();
 

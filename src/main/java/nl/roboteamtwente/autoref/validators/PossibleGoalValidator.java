@@ -33,18 +33,18 @@ public class PossibleGoalValidator implements RuleValidator {
         FieldLine fieldLine = game.getField().getLineByName(fieldLineName);
         if (fieldLine != null) {
             // LeftToRightCoefficient if leftPenaltyStretch is positive otherwise negative
-            float LeftToRightCoefficient = 1;
+            float leftToRightCoefficient = 1;
             if (fieldLine.p1().getY() >= 0) {
-                LeftToRightCoefficient = 1;
+                leftToRightCoefficient = 1;
             } else {
-                LeftToRightCoefficient = -1;
+                leftToRightCoefficient = -1;
             }
             float leftPostP1x = fieldLine.p1().getX();
-            float leftPostP1y = (goalWidthLength/2) * LeftToRightCoefficient;
+            float leftPostP1y = (goalWidthLength/2) * leftToRightCoefficient;
 
             float leftPostP2x = leftPostP1x + side.getCardinality()*goalDepthLength;
 
-            float rightPostP1y = (goalWidthLength/2) * LeftToRightCoefficient * -1;
+            float rightPostP1y = (goalWidthLength/2) * leftToRightCoefficient * -1;
 
             // Check if ball inside right goal
             if ((ballPos.getY() >= Math.min(rightPostP1y, leftPostP1y)) && (ballPos.getY() <= Math.max(rightPostP1y, leftPostP1y))
@@ -69,10 +69,10 @@ public class PossibleGoalValidator implements RuleValidator {
         }
         Side ballSide = ballPos.getX() < 0 ? Side.LEFT : Side.RIGHT;
         if (checkBallInsideGoal(game, ballSide, ballPos)) {
-            Vector2 kickLocation = touch.endLocation().xy();
-            RobotIdentifier kickBot = touch.by();
+            Vector2 kickLocation = touch.getEndLocation().xy();
+            RobotIdentifier kickBot = touch.getBy();
             TeamColor kickingTeam = kickBot.teamColor();
-            double lastTouchTimeStampByTeam = touch.endTime();
+            double lastTouchTimeStampByTeam = touch.getEndTime();
             TeamColor byTeam;
 
             // Scoring team is the opposite team of the team owns the side

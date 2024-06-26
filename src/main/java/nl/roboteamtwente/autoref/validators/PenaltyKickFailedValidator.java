@@ -23,12 +23,12 @@ public class PenaltyKickFailedValidator implements RuleValidator {
 
         // if last finished touch was by goalkeeper
         Touch touch = game.getLastFinishedTouch();
-        if (touch.by().teamColor() != game.getStateForTeam() && game.getTeam(game.getStateForTeam().getOpponentColor()).getGoalkeeperId() == touch.by().id()) {
-            if (touch.deflectionAngle() >= 90.0f) {
-                valid = false;
-                return new Violation(touch.by().teamColor(), game.getBall().getPosition().xy(),
-                        "defending goalkeeper changed angle of velocity of ball by " + touch.deflectionAngle() + " degrees");
-            }
+        if (touch.getBy().teamColor() != game.getStateForTeam() && touch.deflectionAngle() >= 90.0f &&
+                game.getTeam(game.getStateForTeam().getOpponentColor()).getGoalkeeperId() == touch.getBy().id()) {
+            valid = false;
+            return new Violation(touch.getBy().teamColor(), game.getBall().getPosition().xy(),
+                    "defending goalkeeper changed angle of velocity of ball by " + touch.deflectionAngle() + " degrees");
+
         }
 
         return null;
