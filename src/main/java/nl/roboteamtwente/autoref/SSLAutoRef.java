@@ -27,6 +27,7 @@ public class SSLAutoRef {
 
     private int commands = 0;
     private int nextTouchId = 0;
+    private long time_counter = 0;
 
     public SSLAutoRef() {
         this.referee = new Referee();
@@ -67,6 +68,10 @@ public class SSLAutoRef {
         gameStateChanges(game);
 
         referee.setGame(game);
+        time_counter += 1;
+        if (time_counter % 80 == 0) {
+            System.out.println("AUTOREF ALIVE");
+        }
     }
 
     /**

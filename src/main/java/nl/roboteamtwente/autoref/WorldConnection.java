@@ -35,18 +35,19 @@ public class WorldConnection implements Runnable {
      * Receive and process messages
      */
     public void listener() {
-        try {
-            while (!Thread.currentThread().isInterrupted() && worldSocket != null) {
+        while (!Thread.currentThread().isInterrupted() && worldSocket != null) {
+            try {
                 byte[] buffer = worldSocket.recv();
                 StateOuterClass.State packet = StateOuterClass.State.parseFrom(buffer);
                 ref.checkViolations(packet);
-            }
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
-        } catch (ZMQException e) {
-            //4 is the error code when we close the connection by hand, which can be ignored
-            if (e.getErrorCode() != 4) {
+                
+            } catch (InvalidProtocolBufferException e) {
                 e.printStackTrace();
+            } catch (ZMQException e) {
+                //4 is the error code when we close the connection by hand, which can be ignored
+                if (e.getErrorCode() != 4) {
+                    e.printStackTrace();
+                }
             }
         }
     }
