@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class BotCrashingValidator implements RuleValidator {
 
-    private static final float BOT_CRASH_DISTANCE = 0.2f;
+    private static final float BOT_CRASH_DISTANCE = 0.005f;
     private static final float SPEED_VECTOR_THRESHOLD = 1.5f;
     private static final float MIN_SPEED_DIFFERENCE = 0.3f;
     private static final double GRACE_PERIOD = 2.0;
@@ -111,7 +111,7 @@ public class BotCrashingValidator implements RuleValidator {
                 Vector2 robotBlueVel = robotBlue.getVelocity().xy();
                 float distanceBetweenRobots = robotYellowPos.distance(robotBluePos);
 
-                if (distanceBetweenRobots <= BOT_CRASH_DISTANCE) {
+                if (distanceBetweenRobots <= robotYellow.getRadius() + robotBlue.getRadius() + BOT_CRASH_DISTANCE) {
                     // projection length of difference between speed vector
                     float crashSpeed = calculateCollisionVelocity(robotBluePos, robotBlueVel, robotYellowPos, robotYellowVel);
 
