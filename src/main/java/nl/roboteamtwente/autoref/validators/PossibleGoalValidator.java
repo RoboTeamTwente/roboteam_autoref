@@ -40,7 +40,7 @@ public class PossibleGoalValidator implements RuleValidator {
 
             System.out.println(fieldLineX + ", " + goalBacksideX + ", " + goalY + ", " + ballX + ", " + ballY);
             
-            if (fieldLineX < ballX && ballX < goalBacksideX && goalY < ballY && ballY < -1 * goalY) {
+            if (fieldLineX < ballX && ballX < goalBacksideX && -1 * goalY < ballY && ballY < goalY) {
                 System.out.println("Inside goal " + side);
                 return true;
             }
