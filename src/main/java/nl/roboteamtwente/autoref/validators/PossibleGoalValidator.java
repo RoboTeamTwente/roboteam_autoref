@@ -26,29 +26,19 @@ public class PossibleGoalValidator implements RuleValidator {
 
         String fieldLineName;
         if (side.equals(Side.RIGHT)) {
-            fieldLineName = "RightFieldLeftPenaltyStretch";
+            fieldLineName = "RightGoalLine";
         } else {
-            fieldLineName = "LeftFieldLeftPenaltyStretch";
+            fieldLineName = "LeftGoalLine";
         }
         FieldLine fieldLine = game.getField().getLineByName(fieldLineName);
         if (fieldLine != null) {
-            // LeftToRightCoefficient if leftPenaltyStretch is positive otherwise negative
-            float leftToRightCoefficient = 1;
-            if (fieldLine.p1().getY() >= 0) {
-                leftToRightCoefficient = 1;
-            } else {
-                leftToRightCoefficient = -1;
-            }
-            float leftPostP1x = fieldLine.p1().getX();
-            float leftPostP1y = (goalWidthLength/2) * leftToRightCoefficient;
-
-            float leftPostP2x = leftPostP1x + side.getCardinality()*goalDepthLength;
-
-            float rightPostP1y = (goalWidthLength/2) * leftToRightCoefficient * -1;
-
-            // Check if ball inside right goal
-            if ((ballPos.getY() >= Math.min(rightPostP1y, leftPostP1y)) && (ballPos.getY() <= Math.max(rightPostP1y, leftPostP1y))
-                    && (ballPos.getX() >= Math.min(leftPostP1x,leftPostP2x)) && (ballPos.getX() <= Math.max(leftPostP1x,leftPostP2x))) {
+            float fieldLineX = side.getCardinality() * fieldLine.p1().getX();
+            float goalBacksideX = fieldLineX + goalDepthLength;
+            float goalY = goalWidthLength / 2;
+            float ballX = side.getCardinality() * ballPos.getX();
+            float ballY = ballPos.getY();
+            
+            if (fieldLineX < ballX && ballX < goalBacksideX && -1 * goalY < ballY && ballY < goalY) {
                 System.out.println("Inside goal " + side);
                 return true;
             }

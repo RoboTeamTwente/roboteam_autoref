@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Referee {
     private static final List<RuleValidator> RULE_VALIDATORS = List.of(
+            new PossibleGoalValidator(), //First validator to give priority on checking this rule
             new AimlessKickValidator(),
             new AttackerDoubleTouchedBallValidator(),
             new AttackerTooCloseToDefenseAreaValidator(),
@@ -23,8 +24,7 @@ public class Referee {
             new DefenderInDefenseAreaValidator(),
             new DefenderTooCloseToKickPointValidator(),
             new PenaltyKickFailedValidator(),
-            new PlacementSucceededValidator(),
-            new PossibleGoalValidator()
+            new PlacementSucceededValidator()            
     );
 
     private List<RuleValidator> activeValidators = new ArrayList<>();
