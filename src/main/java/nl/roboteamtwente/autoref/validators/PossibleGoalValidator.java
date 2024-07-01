@@ -37,8 +37,6 @@ public class PossibleGoalValidator implements RuleValidator {
             float goalY = goalWidthLength / 2;
             float ballX = side.getCardinality() * ballPos.getX();
             float ballY = ballPos.getY();
-
-            System.out.println(fieldLineX + ", " + goalBacksideX + ", " + goalY + ", " + ballX + ", " + ballY);
             
             if (fieldLineX < ballX && ballX < goalBacksideX && -1 * goalY < ballY && ballY < goalY) {
                 System.out.println("Inside goal " + side);
