@@ -70,7 +70,14 @@ public class SSLAutoRef {
         referee.setGame(game);
         time_counter += 1;
         if (time_counter % 80 == 0) {
-            System.out.println("AUTOREF ALIVE");
+            String message = "AUTOREF ALIVE | ";
+            if (game.isBallInPlay()) {
+                message += "Ball in play";
+            } else {
+                message += game.getState();
+            }
+            
+            System.out.println(message);
         }
     }
 
@@ -291,7 +298,8 @@ public class SSLAutoRef {
             Touch touch_ = ball_.getLastTouchStarted();
             Robot robot_ = game.getRobot(touch_.getBy());
             //if distance between robot and ball is greater than 15m/s * 60Hz + robot radius there is a false positive
-            if (ball_.getPosition().xy().distance(robot_.getPosition().xy()) > (15 * 1/60 + robot_.getRadius())) {
+            float f = (15.0f / 60.0f + robot_.getRadius());
+            if (ball_.getPosition().xy().distance(robot_.getPosition().xy()) > (15.0f / 60.0f + robot_.getRadius())) {
                 return;
             }
         }
