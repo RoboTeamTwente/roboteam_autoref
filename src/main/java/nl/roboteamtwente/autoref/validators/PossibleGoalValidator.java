@@ -34,7 +34,7 @@ public class PossibleGoalValidator implements RuleValidator {
         if (fieldLine != null) {
             float fieldLineX = side.getCardinality() * fieldLine.p1().getX();
             float goalBacksideX = fieldLineX + goalDepthLength;
-            float goalY = goalDepthLength / 2;
+            float goalY = goalWidthLength / 2;
             float ballX = side.getCardinality() * ballPos.getX();
             float ballY = ballPos.getY();
 
