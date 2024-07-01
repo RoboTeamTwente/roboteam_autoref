@@ -294,12 +294,11 @@ public class SSLAutoRef {
 
         //check if ball has randomly teleported
         if (game.getBall().getLastTouchStarted() != null && !game.getBall().getLastTouchStarted().isFinished()) { // a robot is still touching the ball
-            Ball ball_ = game.getBall();
-            Touch touch_ = ball_.getLastTouchStarted();
+            Touch touch_ = ball.getLastTouchStarted();
             Robot robot_ = game.getRobot(touch_.getBy());
             //if distance between robot and ball is greater than 15m/s * 60Hz + robot radius there is a false positive
             float f = (15.0f / 60.0f + robot_.getRadius());
-            if (ball_.getPosition().xy().distance(robot_.getPosition().xy()) > (15.0f / 60.0f + robot_.getRadius())) {
+            if (ball.getPosition().xy().distance(robot_.getPosition().xy()) > (15.0f / 60.0f + robot_.getRadius())) {
                 return;
             }
         }
@@ -311,19 +310,23 @@ public class SSLAutoRef {
             }
         }
 
-        for (Robot robot : game.getRobots()) {
-            Robot oldRobot = game.getPrevious().getRobot(robot.getIdentifier());
+        if (ball.isVisible()) {
+            Ball previousBall = game.getPrevious().getBall();
+            float angle = Math.abs(previousBall.getVelocity().xy().angle(ball.getVelocity().xy()));
 
-            // copy over old values
-            if (oldRobot != null) {
-                robot.setTouch(oldRobot.getTouch());
-                robot.setJustTouchedBall(oldRobot.hasJustTouchedBall());
-            }
 
-            Touch touch = robot.getTouch();
-            float distance = robot.getPosition().xy().distance(ballPosition.xy());
+            for (Robot robot : game.getRobots()) {
+                Robot oldRobot = game.getPrevious().getRobot(robot.getIdentifier());
 
-            if (ball.isVisible()) {
+                // copy over old values
+                if (oldRobot != null) {
+                    robot.setTouch(oldRobot.getTouch());
+                    robot.setJustTouchedBall(oldRobot.hasJustTouchedBall());
+                }
+
+                Touch touch = robot.getTouch();
+                float distance = robot.getPosition().xy().distance(ballPosition.xy());
+
                 // detect if there's a touch
                 if (distance <= robot.getTeam().getRobotRadius() + BALL_TOUCHING_DISTANCE && ball.getPosition().getZ()
                         <= robot.getTeam().getRobotHeight() + BALL_TOUCHING_DISTANCE) {
@@ -349,34 +352,36 @@ public class SSLAutoRef {
                         }
                     }
                 }
-            }
 
-            if (robot.hasJustTouchedBall()) {
-                // we create a new partial touch
-                touch = new Touch(nextTouchId++, ballPosition, game.getTime(), ball.getVelocity(), robotsCloseToBall, robot.getIdentifier());
-                ball.setLastTouchStarted(touch);
-                robot.setTouch(touch);
+                if (robot.hasJustTouchedBall()) {
+                    // we create a new partial touch
+                    touch = new Touch(nextTouchId++, ballPosition, game.getTime(), ball.getVelocity(), robotsCloseToBall, robot.getIdentifier());
+                    ball.setLastTouchStarted(touch);
+                    robot.setTouch(touch);
 
-                System.out.print("touch #" + touch.getId() + " by " + robot.getIdentifier());
+                    System.out.print("touch #" + touch.getId() + " by " + robot.getIdentifier());
 
-                // if this happened during kickoff or a free kick, this is the kick into play
-                if (game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) {
-                    game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
-                    game.setKickIntoPlay(touch);
+                    // if this happened during kickoff or a free kick, this is the kick into play
+                    if (game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) {
+                        game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
+                        game.setKickIntoPlay(touch);
 
-                    // we change the state to running
-                    game.setState(GameState.RUN);
+                        // we change the state to running
+                        game.setState(GameState.RUN);
 
-                    System.out.print(" (kick into play)");
+                        System.out.print(" (kick into play)");
+                    }
+                } else if (touch != null) {
+                    touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
                 }
-            } else if (touch != null) {
-                touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
-            }
 
-            // to conclude, we add the touch to the game
-            if (touch != null && !game.getTouches().contains(touch)) {
-                game.getTouches().add(touch);
+                // to conclude, we add the touch to the game
+                if (touch != null && !game.getTouches().contains(touch)) {
+                    game.getTouches().add(touch);
+                }
             }
+        } else if (!game.getLastStartedTouch().isFinished()) {
+            game.getLastStartedTouch().updatePercentages(ball.isVisible(), robotsCloseToBall);
         }
     }
 
