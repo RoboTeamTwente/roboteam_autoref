@@ -27,10 +27,7 @@ public class AttackerDoubleTouchedBallValidator implements RuleValidator {
         Robot robot = game.getRobot(kickIntoPlay.getBy());
         Touch currentTouch = robot.getTouch();
 
-        // Ball should move 0.05 meters before "in play", then another 0.05 meters before it's a violation.
-        float distance = kickIntoPlay.isFinished() ? 0.05f : 0.10f;
-
-        if (!triggered && currentTouch != null && game.getBall().getPosition().distance(kickIntoPlay.getStartLocation()) >= distance) {
+        if (!triggered && currentTouch != null && game.getBall().getPosition().distance(kickIntoPlay.getStartLocation()) >= 0.05f) {
             triggered = true;
             return new Violation(robot.getTeam().getColor(),robot.getIdentifier(), game.getKickIntoPlay().getStartLocation().xy());
         }
