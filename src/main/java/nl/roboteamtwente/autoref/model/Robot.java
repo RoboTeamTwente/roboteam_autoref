@@ -113,7 +113,7 @@ public class Robot extends Entity {
      * @return a boolean if the robot has just touched the ball.
      */
     public boolean hasJustTouchedBall() {
-        return this.justTouchedBall;
+        return justTouchedBall;
     }
 
     /**

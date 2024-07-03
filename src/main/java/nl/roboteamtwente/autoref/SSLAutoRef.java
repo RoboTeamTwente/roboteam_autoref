@@ -88,11 +88,9 @@ public class SSLAutoRef {
      * @param statePacket packet AutoRef got from World
      */
     private void deriveRefereeMessage(Game game, StateOuterClass.State statePacket) {
+        game.setKickPoint(game.getPrevious().getKickPoint());
         if (game.getState() == null || statePacket.getReferee().getCommandCounter() != commands) {
             game.setState(game.getPrevious().getState());
-            game.setKickPoint(game.getPrevious().getKickPoint());
-            System.out.println("old: " + game.getPrevious().getKickPoint());
-            System.out.println("new: " + game.getKickPoint());
 
             commands = statePacket.getReferee().getCommandCounter();
 
@@ -117,7 +115,6 @@ public class SSLAutoRef {
                     // Normal start starts the current stage of the game.
                     if (game.getPrevious().getState() == GameState.PREPARE_KICKOFF) {
                         game.setKickPoint(game.getPrevious().getBall().getPosition().xy());
-                        System.out.println("kick point: " + game.getKickPoint().getX() + ", " + game.getKickPoint().getY());
                         game.setState(GameState.KICKOFF);
                     } else if (game.getPrevious().getState() == GameState.PREPARE_PENALTY) {
                         game.setState(GameState.PENALTY);
@@ -371,6 +368,7 @@ public class SSLAutoRef {
                         touch.setEndLocation(ballPosition);
                         touch.setEndTime(game.getTime());
                         touch.setEndVelocity(ball.getVelocity());
+
 
                         // if this touch is the kick into play, we update that too
                         if (Objects.equals(touch, game.getKickIntoPlay())) {
