@@ -91,6 +91,7 @@ public class SSLAutoRef {
         if (game.getState() == null || statePacket.getReferee().getCommandCounter() != commands) {
             game.setState(game.getPrevious().getState());
             game.setKickPoint(game.getPrevious().getKickPoint());
+            System.out.println("old: " + game.getPrevious().getKickPoint());
 
             commands = statePacket.getReferee().getCommandCounter();
 
