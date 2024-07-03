@@ -352,7 +352,7 @@ public class SSLAutoRef {
                         touch.setEndLocation(ballPosition);
                         touch.setEndTime(game.getTime());
                         touch.setEndVelocity(ball.getVelocity());
-
+                        
                         // if this touch is the kick into play, we update that too
                         if (Objects.equals(touch, game.getKickIntoPlay())) {
                             game.setKickIntoPlay(touch);
@@ -367,8 +367,8 @@ public class SSLAutoRef {
                     robot.setTouch(touch);
                     game.getTouches().add(touch);
                     
-                    System.out.print("touch #" + touch.getId() + " by " + robot.getIdentifier());
-
+                    System.out.println("touch #" + touch.getId() + " by " + robot.getIdentifier() + " at " + ball.getPosition().getX() + ", " + ball.getPosition().getY());
+                    
                     // if this happened during kickoff or a free kick, this is the kick into play
                     if (game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) {
                         game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
@@ -377,9 +377,8 @@ public class SSLAutoRef {
                         // we change the state to running
                         game.setState(GameState.RUN);
 
-                        System.out.print(" (kick into play)");
+                        System.out.println(" (kick into play)");
                     }
-                    System.out.println("");
                 } else if (touch != null) {
                     touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
                 }
