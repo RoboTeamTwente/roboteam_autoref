@@ -115,6 +115,7 @@ public class SSLAutoRef {
                     // Normal start starts the current stage of the game.
                     if (game.getPrevious().getState() == GameState.PREPARE_KICKOFF) {
                         game.setKickPoint(game.getPrevious().getBall().getPosition().xy());
+                        System.out.println("kick point: " + game.getKickPoint().getX() + ", " + game.getKickPoint().getY());
                         game.setState(GameState.KICKOFF);
                     } else if (game.getPrevious().getState() == GameState.PREPARE_PENALTY) {
                         game.setState(GameState.PENALTY);
