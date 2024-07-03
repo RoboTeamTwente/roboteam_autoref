@@ -21,6 +21,7 @@ public class Ball extends Entity {
 
     /**
      * The velocity calculated by comparing the previous and current position of the ball
+     * mainly used for determining the angle between 2 positions
      */
     private Vector2 velocityByPosition;
 
@@ -51,6 +52,7 @@ public class Ball extends Entity {
     /**
      * Calculate the velocity of the ball by comparing the current and old position of the ball
      * Multiplied by 80Hz (speed of the camera) to get to m/s
+     * Less acurate magnitude than observer/world data
      */
     public void calculateVelocityByPosition(Vector2 oldPosition) {
         this.velocityByPosition = this.getPosition().xy().subtract(oldPosition);
