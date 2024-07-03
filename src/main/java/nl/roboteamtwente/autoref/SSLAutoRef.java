@@ -196,6 +196,10 @@ public class SSLAutoRef {
         game.getBall().getVelocity().setY(world.getBall().getVel().getY());
         game.getBall().getVelocity().setZ(world.getBall().getZVel());
         game.getBall().setVisible(world.getBall().getVisible());
+
+        if (game.getBall().isVisible() && game.getPrevious().getBall().isVisible()) {
+            game.getBall().calculateVelocityByPosition(game.getPrevious().getBall().getPosition().xy());
+        }
     }
 
     /**
@@ -312,8 +316,10 @@ public class SSLAutoRef {
 
         if (ball.isVisible()) {
             Ball previousBall = game.getPrevious().getBall();
-            float angle = Math.abs(previousBall.getVelocity().xy().angle(ball.getVelocity().xy()));
-
+            float angle = 0.0f;
+            if (previousBall.isVisible() && previousBall.getVelocityByPosition() != null) {
+                angle = Math.abs(ball.getVelocityByPosition().angle(previousBall.getVelocityByPosition()));
+            }
 
             for (Robot robot : game.getRobots()) {
                 Robot oldRobot = game.getPrevious().getRobot(robot.getIdentifier());
@@ -328,8 +334,9 @@ public class SSLAutoRef {
                 float distance = robot.getPosition().xy().distance(ballPosition.xy());
 
                 // detect if there's a touch
-                if (distance <= robot.getTeam().getRobotRadius() + BALL_TOUCHING_DISTANCE && ball.getPosition().getZ()
-                        <= robot.getTeam().getRobotHeight() + BALL_TOUCHING_DISTANCE) {
+                if ((distance <= robot.getTeam().getRobotRadius() + BALL_TOUCHING_DISTANCE && ball.getPosition().getZ()
+                        <= robot.getTeam().getRobotHeight() + BALL_TOUCHING_DISTANCE) || (angle > 10.0f && angle < 350.0f &&
+                        distance <= robot.getTeam().getRobotRadius() + 7.0f / 80.0f && ball.getVelocity().xy().magnitude() > 0.01f)) {
                     ball.getRobotsTouching().add(robot);
 
                     // it just started touching ball, either when its the first frame or when
@@ -358,7 +365,8 @@ public class SSLAutoRef {
                     touch = new Touch(nextTouchId++, ballPosition, game.getTime(), ball.getVelocity(), robotsCloseToBall, robot.getIdentifier());
                     ball.setLastTouchStarted(touch);
                     robot.setTouch(touch);
-
+                    game.getTouches().add(touch);
+                    
                     System.out.print("touch #" + touch.getId() + " by " + robot.getIdentifier());
 
                     // if this happened during kickoff or a free kick, this is the kick into play
@@ -371,6 +379,7 @@ public class SSLAutoRef {
 
                         System.out.print(" (kick into play)");
                     }
+                    System.out.println("");
                 } else if (touch != null) {
                     touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
                 }
@@ -380,7 +389,7 @@ public class SSLAutoRef {
                     game.getTouches().add(touch);
                 }
             }
-        } else if (!game.getLastStartedTouch().isFinished()) {
+        } else if (game.getLastStartedTouch() != null && !game.getLastStartedTouch().isFinished()) {
             game.getLastStartedTouch().updatePercentages(ball.isVisible(), robotsCloseToBall);
         }
     }

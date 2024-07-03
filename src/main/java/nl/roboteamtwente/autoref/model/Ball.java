@@ -19,6 +19,11 @@ public class Ball extends Entity {
 
     private boolean visible;
 
+    /**
+     * The velocity calculated by comparing the previous and current position of the ball
+     */
+    private Vector2 velocityByPosition;
+
     public Touch getLastTouchStarted() {
         return lastTouchStarted;
     }
@@ -32,15 +37,29 @@ public class Ball extends Entity {
      * @return a list of robots which are currently touching the ball.
      */
     public List<Robot> getRobotsTouching() {
-        return robotsTouching;
+        return this.robotsTouching;
     }
 
     public boolean isVisible(){
-        return visible;
+        return this.visible;
     }
 
     public void setVisible(boolean vis){
         this.visible = vis;
+    }
+
+    /**
+     * Calculate the velocity of the ball by comparing the current and old position of the ball
+     * Multiplied by 80Hz (speed of the camera) to get to m/s
+     */
+    public void calculateVelocityByPosition(Vector2 oldPosition) {
+        this.velocityByPosition = this.getPosition().xy().subtract(oldPosition);
+        this.velocityByPosition.setX(this.velocityByPosition.getX()*80.0f);
+        this.velocityByPosition.setY(this.velocityByPosition.getY()*80.0f);
+    }
+
+    public Vector2 getVelocityByPosition() {
+        return this.velocityByPosition;
     }
 
 

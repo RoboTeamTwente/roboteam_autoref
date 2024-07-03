@@ -74,7 +74,7 @@ public class Vector2 {
 
     /**
      * Subtract the dimensions of another vector to the one in the current object.
-     * @param other the vector to add.
+     * @param other the vector to substract.
      * @return the new Vector object.
      */
     public Vector2 subtract(Vector2 other) {
@@ -83,7 +83,7 @@ public class Vector2 {
 
     /**
      * Calculate the dot product of the current object with other object.
-     * @param other the vector to add.
+     * @param other the second vector.
      * @return the new Vector object.
      */
     public float dotProduct(Vector2 other) {
