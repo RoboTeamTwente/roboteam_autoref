@@ -205,7 +205,6 @@ public class SSLAutoRef {
         }
 
         // if this happened during kickoff or a free kick, this is the kick into play
-        System.out.println("current: " + game.getKickPoint());
         if ((game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) && 
             game.getBall().getPosition().xy().distance(game.getKickPoint()) > 0.05f) {
             game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
