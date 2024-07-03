@@ -5,6 +5,8 @@ import org.robocup.ssl.proto.SslGcRefereeMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.Optional;
 
 
 /**
@@ -64,6 +66,7 @@ public class Game {
     private Touch kickIntoPlay;
     private KickType kickType;
     private final List<Touch> touches;
+    private final Comparator<Touch> touchComparator = Comparator.comparing(Touch::getEndTime);
 
     private boolean forceStarted;
 
@@ -222,7 +225,8 @@ public class Game {
     }
 
     public Touch getLastFinishedTouch() {
-        return touches.stream().filter(Touch::isFinished).reduce((first, second) -> second).orElse(null);
+        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(touchComparator);
+        return optionalTouch.isPresent() ? optionalTouch.get() : null;
     }
 
     public Touch getKickIntoPlay() {
