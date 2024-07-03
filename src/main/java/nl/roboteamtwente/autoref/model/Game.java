@@ -63,6 +63,7 @@ public class Game {
 
     private Game previous;
 
+    private Vector2 kickPoint;
     private Touch kickIntoPlay;
     private KickType kickType;
     private final List<Touch> touches;
@@ -263,6 +264,14 @@ public class Game {
 
     public boolean isBallInPlay() {
         return getState() == GameState.RUN || (getState() == GameState.PENALTY && getKickIntoPlay() != null);
+    }
+
+    public void setKickPoint(Vector2 point) {
+        this.kickPoint = point;
+    }
+
+    public Vector2 getKickPoint() {
+        return this.kickPoint;
     }
 
 }

@@ -113,6 +113,7 @@ public class SSLAutoRef {
                 case NORMAL_START -> {
                     // Normal start starts the current stage of the game.
                     if (game.getPrevious().getState() == GameState.PREPARE_KICKOFF) {
+                        game.setKickPoint(game.getPrevious().getBall().getPosition().xy());
                         game.setState(GameState.KICKOFF);
                     } else if (game.getPrevious().getState() == GameState.PREPARE_PENALTY) {
                         game.setState(GameState.PENALTY);
@@ -121,6 +122,7 @@ public class SSLAutoRef {
                 //noinspection deprecation
                 case INDIRECT_FREE_YELLOW, INDIRECT_FREE_BLUE, DIRECT_FREE_YELLOW, DIRECT_FREE_BLUE -> {
                     // Free kick is always triggered.
+                    game.setKickPoint(game.getPrevious().getBall().getPosition().xy());
                     game.setState(GameState.FREE_KICK);
                 }
                 case PREPARE_KICKOFF_YELLOW, PREPARE_KICKOFF_BLUE -> {
@@ -196,9 +198,22 @@ public class SSLAutoRef {
         game.getBall().getVelocity().setY(world.getBall().getVel().getY());
         game.getBall().getVelocity().setZ(world.getBall().getZVel());
         game.getBall().setVisible(world.getBall().getVisible());
+        game.setKickPoint(game.getPrevious().getKickPoint());
 
         if (game.getBall().isVisible() && game.getPrevious().getBall().isVisible()) {
             game.getBall().calculateVelocityByPosition(game.getPrevious().getBall().getPosition().xy());
+        }
+
+        // if this happened during kickoff or a free kick, this is the kick into play
+        if ((game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) && 
+            game.getBall().getPosition().xy().distance(game.getKickPoint()) > 0.05f) {
+            game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
+            game.setKickIntoPlay(game.getLastStartedTouch());
+
+            // we change the state to running
+            game.setState(GameState.RUN);
+
+            System.out.println("ball kicked into play");
         }
     }
 
@@ -352,7 +367,7 @@ public class SSLAutoRef {
                         touch.setEndLocation(ballPosition);
                         touch.setEndTime(game.getTime());
                         touch.setEndVelocity(ball.getVelocity());
-                        
+
                         // if this touch is the kick into play, we update that too
                         if (Objects.equals(touch, game.getKickIntoPlay())) {
                             game.setKickIntoPlay(touch);
@@ -368,17 +383,6 @@ public class SSLAutoRef {
                     game.getTouches().add(touch);
                     
                     System.out.println("touch #" + touch.getId() + " by " + robot.getIdentifier() + " at " + ball.getPosition().getX() + ", " + ball.getPosition().getY());
-                    
-                    // if this happened during kickoff or a free kick, this is the kick into play
-                    if (game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) {
-                        game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
-                        game.setKickIntoPlay(touch);
-
-                        // we change the state to running
-                        game.setState(GameState.RUN);
-
-                        System.out.println(" (kick into play)");
-                    }
                 } else if (touch != null) {
                     touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
                 }
