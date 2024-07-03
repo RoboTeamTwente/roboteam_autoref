@@ -90,6 +90,7 @@ public class SSLAutoRef {
     private void deriveRefereeMessage(Game game, StateOuterClass.State statePacket) {
         if (game.getState() == null || statePacket.getReferee().getCommandCounter() != commands) {
             game.setState(game.getPrevious().getState());
+            game.setKickPoint(game.getPrevious().getKickPoint());
 
             commands = statePacket.getReferee().getCommandCounter();
 
@@ -198,7 +199,6 @@ public class SSLAutoRef {
         game.getBall().getVelocity().setY(world.getBall().getVel().getY());
         game.getBall().getVelocity().setZ(world.getBall().getZVel());
         game.getBall().setVisible(world.getBall().getVisible());
-        game.setKickPoint(game.getPrevious().getKickPoint());
 
         if (game.getBall().isVisible() && game.getPrevious().getBall().isVisible()) {
             game.getBall().calculateVelocityByPosition(game.getPrevious().getBall().getPosition().xy());
