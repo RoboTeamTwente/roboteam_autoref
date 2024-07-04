@@ -20,16 +20,17 @@ public class AttackerDoubleTouchedBallValidator implements RuleValidator {
     @Override
     public RuleViolation validate(Game game) {
         Touch kickIntoPlay = game.getKickIntoPlay();
-        if (kickIntoPlay == null || !kickIntoPlay.equals(game.getLastFinishedTouch())) {
+        if (kickIntoPlay == null || 
+        !(kickIntoPlay.equals(game.getLastFinishedTouch()) || kickIntoPlay.equals(game.getLastStartedTouch()))) {
             return null;
         }
 
         Robot robot = game.getRobot(kickIntoPlay.getBy());
         Touch currentTouch = robot.getTouch();
 
-        if (!triggered && currentTouch != null && game.getBall().getPosition().distance(kickIntoPlay.getStartLocation()) >= 0.05f) {
+        if (!triggered && currentTouch != null && game.getBall().getPosition().xy().distance(game.getKickPoint()) >= 0.05f) {
             triggered = true;
-            return new Violation(robot.getTeam().getColor(),robot.getIdentifier(), game.getKickIntoPlay().getStartLocation().xy());
+            return new Violation(robot.getTeam().getColor(),robot.getIdentifier(), game.getKickPoint());
         }
 
         return null;

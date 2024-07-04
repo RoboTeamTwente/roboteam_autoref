@@ -67,7 +67,8 @@ public class Game {
     private Touch kickIntoPlay;
     private KickType kickType;
     private final List<Touch> touches;
-    private final Comparator<Touch> touchComparator = Comparator.comparing(Touch::getEndTime);
+    private final Comparator<Touch> endTimeComparator = Comparator.comparing(Touch::getEndTime);
+    private final Comparator<Touch> startTimeComparator = Comparator.comparing(Touch::getStartTime);
 
     private boolean forceStarted;
 
@@ -222,11 +223,12 @@ public class Game {
     }
 
     public Touch getLastStartedTouch() {
-        return touches.isEmpty() ? null : touches.get(touches.size() - 1);
+        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(startTimeComparator);
+        return optionalTouch.isPresent() ? optionalTouch.get() : null;
     }
 
     public Touch getLastFinishedTouch() {
-        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(touchComparator);
+        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(endTimeComparator);
         return optionalTouch.isPresent() ? optionalTouch.get() : null;
     }
 

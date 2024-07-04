@@ -204,11 +204,13 @@ public class SSLAutoRef {
             game.getBall().calculateVelocityByPosition(game.getPrevious().getBall().getPosition().xy());
         }
 
+        game.setKickIntoPlay(game.getPrevious().getKickIntoPlay());
+
         // if this happened during kickoff or a free kick, this is the kick into play
         if ((game.getState() == GameState.KICKOFF || game.getState() == GameState.FREE_KICK) && 
-            game.getBall().getPosition().xy().distance(game.getKickPoint()) > 0.05f) {
+            game.getBall().getPosition().xy().distance(game.getKickPoint()) >= 0.05f) {
             game.setKickType(game.getState() == GameState.KICKOFF ? KickType.KICKOFF : KickType.FREE_KICK);
-            game.setKickIntoPlay(game.getLastStartedTouch());
+            game.setKickIntoPlay(game.getPrevious().getLastStartedTouch());
 
             // we change the state to running
             game.setState(GameState.RUN);
@@ -297,7 +299,6 @@ public class SSLAutoRef {
         // copy variables from previous game
         game.getBall().setLastTouchStarted(game.getPrevious().getBall().getLastTouchStarted());
         game.setKickType(game.getPrevious().getKickType());
-        game.setKickIntoPlay(game.getPrevious().getKickIntoPlay());
         for (Touch touch : game.getPrevious().getTouches()) {
             if (!touch.isFinished()) {
                 game.getTouches().add(touch);
@@ -368,6 +369,7 @@ public class SSLAutoRef {
                         touch.setEndTime(game.getTime());
                         touch.setEndVelocity(ball.getVelocity());
 
+                        //System.out.println("End of touch #" + touch.getId() + " at [x,y] :" + touch.getEndLocation().getX() + ", " + touch.getEndLocation().getY());
 
                         // if this touch is the kick into play, we update that too
                         if (Objects.equals(touch, game.getKickIntoPlay())) {
@@ -383,7 +385,7 @@ public class SSLAutoRef {
                     robot.setTouch(touch);
                     game.getTouches().add(touch);
                     
-                    System.out.println("touch #" + touch.getId() + " by " + robot.getIdentifier() + " at " + ball.getPosition().getX() + ", " + ball.getPosition().getY());
+                    //System.out.println("touch #" + touch.getId() + " by " + robot.getIdentifier() + " at " + ball.getPosition().getX() + ", " + ball.getPosition().getY());
                 } else if (touch != null) {
                     touch.updatePercentages(ball.isVisible(), robotsCloseToBall);
                 }
