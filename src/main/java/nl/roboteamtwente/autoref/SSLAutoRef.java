@@ -342,11 +342,11 @@ public class SSLAutoRef {
                 System.out.println("ANGLE: " + angle + "; ball pos: " + ball.getPosition().xy() + "; magnitude: " + ball.getVelocity().xy().magnitude());
             }
             if (ball.getVelocity().xy().magnitude() > 0.01f) {
-                // case: ball is rolling, robot has velocity in the same direct to try and grab the ball.
-                // but ball bounces off the robot
-                if (ball.getVelocity().xy().magnitude() > previousBall.getVelocity().xy().magnitude() + 0.1f) {
-                    for (Robot robot : game.getRobots()) {
-                        // robot is in robot radius + speed ball + 0.025 margin meters from the ball
+                for (Robot robot : game.getRobots()) {
+                    // case: ball is rolling, robot has velocity in the same direct to try and grab the ball.
+                    // but ball bounces off the robot
+                    if (ball.getVelocity().xy().magnitude() > previousBall.getVelocity().xy().magnitude() + 0.1f && robot.getVelocity().xy().magnitude() > 0.1f) {
+                        // robot is in (robot radius + speed ball + 0.03 margin) meters from the ball
                         // robot is traveling towards to ball
                         distance = ball.getPosition().xy().distance(robot.getPosition().xy());
                         if (distance < robot.getRadius() + ball.getVelocity().xy().magnitude() / 80.0f + 0.03f 
@@ -354,24 +354,18 @@ public class SSLAutoRef {
                         && distance < deflectedMinDistance) {
                             deflectedMinDistance = distance;
                             deflectedBy = robot.getIdentifier();
-                            System.out.println("forward deflect");
                         }
+                        
                     }
-                }
 
-                // case: ball bounces of a robot, changing its direction of travel
-                if (angle > BALL_ANGLE_NOISE_RANGE && angle < 360.0f - BALL_ANGLE_NOISE_RANGE) {
-                    for (Robot robot : game.getRobots()) {
-                        if (previousBall.getRobotsTouching().contains(robot)) {
-                            continue;
-                        }
+                    // case: ball bounces of a robot, changing its direction of travel
+                    if (angle > BALL_ANGLE_NOISE_RANGE && angle < 360.0f - BALL_ANGLE_NOISE_RANGE && !previousBall.getRobotsTouching().contains(robot)) {
                         for (int i = 0; i <= 100; i++) {
                             Vector2 ballPosAdjusted = previousBall.getPosition().xy().add(previousBall.getVelocity().xy().multiply(i/100.0f));
                             distance = robot.getPosition().xy().distance(ballPosAdjusted);
                             if (distance < robot.getRadius() + 0.022 && distance < deflectedMinDistance) {
                                 deflectedMinDistance = distance;
                                 deflectedBy = robot.getIdentifier();
-                                System.out.println("bounce deflect by " + deflectedBy + " with ball speed [prev, now] " + previousBall.getVelocity().xy() + ", " + ball.getVelocity().xy());
                             } else if (distance >= 1.0f) {
                                 break;
                             } else if (robot.getIdentifier() == deflectedBy && distance > deflectedMinDistance) {
