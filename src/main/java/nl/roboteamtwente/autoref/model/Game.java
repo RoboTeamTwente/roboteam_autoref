@@ -5,6 +5,8 @@ import org.robocup.ssl.proto.SslGcRefereeMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.Optional;
 
 
 /**
@@ -61,9 +63,12 @@ public class Game {
 
     private Game previous;
 
+    private Vector2 kickPoint;
     private Touch kickIntoPlay;
     private KickType kickType;
     private final List<Touch> touches;
+    private final Comparator<Touch> endTimeComparator = Comparator.comparing(Touch::getEndTime);
+    private final Comparator<Touch> startTimeComparator = Comparator.comparing(Touch::getStartTime);
 
     private boolean forceStarted;
 
@@ -218,11 +223,13 @@ public class Game {
     }
 
     public Touch getLastStartedTouch() {
-        return touches.isEmpty() ? null : touches.get(touches.size() - 1);
+        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(startTimeComparator);
+        return optionalTouch.isPresent() ? optionalTouch.get() : null;
     }
 
     public Touch getLastFinishedTouch() {
-        return touches.stream().filter(Touch::isFinished).reduce((first, second) -> second).orElse(null);
+        Optional<Touch> optionalTouch = touches.stream().filter(Touch::isFinished).max(endTimeComparator);
+        return optionalTouch.isPresent() ? optionalTouch.get() : null;
     }
 
     public Touch getKickIntoPlay() {
@@ -259,6 +266,14 @@ public class Game {
 
     public boolean isBallInPlay() {
         return getState() == GameState.RUN || (getState() == GameState.PENALTY && getKickIntoPlay() != null);
+    }
+
+    public void setKickPoint(Vector2 point) {
+        this.kickPoint = point;
+    }
+
+    public Vector2 getKickPoint() {
+        return this.kickPoint;
     }
 
 }

@@ -32,11 +32,11 @@ public class Ball extends Entity {
      * @return a list of robots which are currently touching the ball.
      */
     public List<Robot> getRobotsTouching() {
-        return robotsTouching;
+        return this.robotsTouching;
     }
 
     public boolean isVisible(){
-        return visible;
+        return this.visible;
     }
 
     public void setVisible(boolean vis){

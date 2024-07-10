@@ -35,11 +35,11 @@ public class BallLeftFieldTouchLineValidator implements RuleValidator {
         }
 
         if (ball.getY() > topTouchLine.p1().getY() || ball.getY() < bottomTouchLine.p1().getY()) {
-            if (game.getLastStartedTouch() == null) {
+            if (game.getBall().getLastTouchStarted() == null) {
                 return null;
             }
 
-            RobotIdentifier byBot = game.getLastStartedTouch().getBy();
+            RobotIdentifier byBot = game.getBall().getLastTouchStarted().getBy();
             if (game.getTime() - lastViolations > GRACE_PERIOD) {
                 lastViolations = game.getTime();
                 return new Violation(byBot.teamColor(), byBot.id(), ball.xy());

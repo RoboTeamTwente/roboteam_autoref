@@ -85,4 +85,8 @@ public class Touch {
     public RobotIdentifier getBy() {
         return by;
     }
+
+    public double getStartTime() {
+        return this.startTime;
+    }
 }

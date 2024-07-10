@@ -74,7 +74,7 @@ public class Vector2 {
 
     /**
      * Subtract the dimensions of another vector to the one in the current object.
-     * @param other the vector to add.
+     * @param other the vector to substract.
      * @return the new Vector object.
      */
     public Vector2 subtract(Vector2 other) {
@@ -82,8 +82,17 @@ public class Vector2 {
     }
 
     /**
+     * Multiply vector by a constant
+     * @param constant the constant the vertor needs to be multiplied with
+     * @return the new Vector object
+     */
+    public Vector2 multiply(float constant) {
+        return new Vector2(constant * this.getX(), constant * this.getY());
+    }
+
+    /**
      * Calculate the dot product of the current object with other object.
-     * @param other the vector to add.
+     * @param other the second vector.
      * @return the new Vector object.
      */
     public float dotProduct(Vector2 other) {
