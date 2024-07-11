@@ -105,6 +105,14 @@ public class Vector3 {
         return (float) Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2));
     }
 
+    /**
+     * Calculate the length/magnitude of the current vector.
+     * @return the length of vector.
+     */
+    public float magnitude() {
+        return ((float) Math.sqrt(this.getX()*this.getX() + this.getY()*this.getY() + this.getZ()*this.getZ()));
+    }
+
 
     /**
      * @return the string value of the Vector3 object.

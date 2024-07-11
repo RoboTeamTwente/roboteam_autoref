@@ -104,7 +104,7 @@ public class Vector2 {
      * @return the length of vector.
      */
     public float magnitude() {
-        return ((float) Math.sqrt(this.getX()*this.getX() + this.getY()* this.getY()));
+        return ((float) Math.sqrt(this.getX()*this.getX() + this.getY()*this.getY()));
     }
 
     /**
