@@ -35,7 +35,8 @@ public class AttackerTouchedBallInDefenseAreaValidator implements RuleValidator 
     @Override
     public RuleViolation validate(Game game) {
         for (Robot robot : game.getBall().getRobotsTouching()) {
-            if (!game.getField().isInDefenseArea(robot.getTeam().getSide().getOpposite(), game.getBall().getPosition().xy())) {
+            if (!game.getField().isPartiallyInDefenseArea(robot.getTeam().getSide().getOpposite(), robot.getPosition().xy()) &&
+            !game.getField().isInDefenseArea(robot.getTeam().getSide().getOpposite(), game.getBall().getPosition().xy())) {
                 continue;
             }
 

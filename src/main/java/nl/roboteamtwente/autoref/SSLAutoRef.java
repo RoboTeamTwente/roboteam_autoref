@@ -290,18 +290,19 @@ public class SSLAutoRef {
 
         // Add extra lines needed for rules around the defense area
         for (Side side : Side.values()) {
-            FieldLine penaltyStretch = game.getField().getLineByName(side.name().substring(0, 1) + side.name().substring(1).toLowerCase() + "PenaltyStretch");
+            String sideString = side == Side.LEFT ? "Left" : "Right";
+            FieldLine penaltyStretch = game.getField().getLineByName(sideString + "PenaltyStretch");
             // check if p1 or p2 is positive
             int factor = penaltyStretch.p1().getY() > penaltyStretch.p2().getY() ? 1 : -1;
 
-            String linename = side.name().toLowerCase() + "InnerMarginPenaltyStretch";
+            String linename = sideString + "InnerMarginPenaltyStretch";
             FieldLine innerMarginPenaltyStretch = new FieldLine(linename, 
             penaltyStretch.p1().add(new Vector2(side.getCardinality()*0.09f, factor*-0.09f)).roundTo3Decimals(), 
             penaltyStretch.p2().add(new Vector2(side.getCardinality()*0.09f, factor*0.09f)).roundTo3Decimals(),
             penaltyStretch.thickness());
             game.getField().addLine(innerMarginPenaltyStretch);
 
-            linename = side.name().toLowerCase() + "OuterMarginPenaltyStretch";
+            linename = sideString + "OuterMarginPenaltyStretch";
             FieldLine outerMarginPenaltyStretch = new FieldLine(linename, 
             penaltyStretch.p1().add(new Vector2(side.getCardinality()*-0.09f, factor*0.09f)).roundTo3Decimals(), 
             penaltyStretch.p2().add(new Vector2(side.getCardinality()*-0.09f, factor*-0.09f)).roundTo3Decimals(), 
@@ -412,7 +413,6 @@ public class SSLAutoRef {
                 if ((distance <= robot.getTeam().getRobotRadius() + BALL_TOUCHING_DISTANCE && ball.getPosition().getZ()
                         <= robot.getTeam().getRobotHeight() + BALL_TOUCHING_DISTANCE) || robot.getIdentifier().equals(deflectedBy)) {
                     ball.getRobotsTouching().add(robot);
-
                     // it just started touching ball, either when its the first frame or when
                     // in the previous frame the robot was not touching the ball.
                     robot.setJustTouchedBall(oldRobot == null || !oldRobot.isTouchingBall());
@@ -442,6 +442,7 @@ public class SSLAutoRef {
                     ball.setLastTouchStarted(touch);
                     robot.setTouch(touch);
                     game.getTouches().add(touch);
+                    
                     
                     System.out.println("touch #" + touch.getId() + " by " + robot.getIdentifier() + " at " + ball.getPosition().getX() + ", " + ball.getPosition().getY());
                 } else if (touch != null) {

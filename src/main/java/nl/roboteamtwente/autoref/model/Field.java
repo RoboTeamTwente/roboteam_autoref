@@ -82,6 +82,40 @@ public class Field {
 
     }
 
+    /**
+     * @param side side of the field that the check needs to happen on
+     * @param location location of the object
+     */
+    public boolean isFullyInDefenseArea(Side side, Vector2 location) {
+        String sideString = side == Side.LEFT ? "Left" : "Right";
+
+        FieldLine adjustedPenaltyStretch = getLineByName(sideString + "InnerMarginPenaltyStretch");
+        if (location.getX() * side.getCardinality() < adjustedPenaltyStretch.p1().getX() * side.getCardinality()) {
+            return false;
+        }
+
+        // check if p1 or p2 is positive
+        int factor = adjustedPenaltyStretch.p1().getY() > adjustedPenaltyStretch.p2().getY() ? 1 : -1;
+        return (location.getY() > adjustedPenaltyStretch.p2().getY() * factor && location.getY() < adjustedPenaltyStretch.p1().getY() * factor);
+    }
+    
+    /**
+     * @param side side of the field that the check needs to happen on
+     * @param location location of the object
+     */
+    public boolean isPartiallyInDefenseArea(Side side, Vector2 location) {
+        String sideString = side == Side.LEFT ? "Left" : "Right";
+
+        FieldLine adjustedPenaltyStretch = getLineByName(sideString + "OuterMarginPenaltyStretch");
+        if (location.getX() * side.getCardinality() < adjustedPenaltyStretch.p1().getX() * side.getCardinality()) {
+            return false;
+        }
+
+        // check if p1 or p2 is positive
+        int factor = adjustedPenaltyStretch.p1().getY() > adjustedPenaltyStretch.p2().getY() ? 1 : -1;
+        return (location.getY() > adjustedPenaltyStretch.p2().getY() * factor && location.getY() < adjustedPenaltyStretch.p1().getY() * factor);
+    }
+
     public boolean isInOwnHalf(Side side, Vector2 location){
         FieldLine halfway = getLineByName("HalfwayLine");
 //        if (location.getX()  * side.getCardinality() > halfway.p1().getX() * side.getCardinality()){
