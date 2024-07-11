@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.Arrays;
 
 public class SSLAutoRef {
     private static final float BALL_TOUCHING_DISTANCE = 0.025f;
@@ -282,8 +283,16 @@ public class SSLAutoRef {
             Vector2 p1 = new Vector2(lineSegment.getP1().getX() / 1000.0f, lineSegment.getP1().getY() / 1000.0f);
             Vector2 p2 = new Vector2(lineSegment.getP2().getX() / 1000.0f, lineSegment.getP2().getY() / 1000.0f);
             FieldLine fieldLine = new FieldLine(lineSegment.getName(), p1, p2, lineSegment.getThickness() / 1000.0f);
+            System.out.println(fieldLine);
 
             game.getField().addLine(fieldLine);
+        }
+
+        // Add extra lines needed for rules around the defense area
+        for (Side side : Side.values()) {
+            String linename = side.name().toLowerCase() + "InnerMarginPenaltyStretch";
+            Field line penaltyStretch = game.getField().getLineByName(side.name().toLowerCase() + "PenaltyStretch");
+            FieldLine innerMarginPenaltyStretch = new FieldLine();
         }
     }
 
@@ -341,7 +350,7 @@ public class SSLAutoRef {
             if (game.isBallInPlay()) {
                 System.out.println("ANGLE: " + angle + "; ball pos: " + ball.getPosition().xy() + "; magnitude: " + ball.getVelocity().xy().magnitude());
             }
-            if (ball.getVelocity().xy().magnitude() > 0.01f) {
+            if (ball.getVelocity().xy().magnitude() > 0.01f && ball.getPosition().getZ() < 0.15f) {
                 for (Robot robot : game.getRobots()) {
                     // case: ball is rolling, robot has velocity in the same direct to try and grab the ball.
                     // but ball bounces off the robot
