@@ -137,6 +137,13 @@ public class Vector2 {
     }
 
     /**
+     * Round the values of the vector to 3 decimals
+     */
+    public Vector2 roundTo3Decimals() {
+        return new Vector2(Math.round(1000*this.x)/1000.0f, Math.round(1000*this.y)/1000.0f);
+    }
+
+    /**
      * @return the string value of the Vector2 object.
      */
     @Override

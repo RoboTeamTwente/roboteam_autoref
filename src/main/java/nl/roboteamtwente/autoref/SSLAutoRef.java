@@ -4,6 +4,7 @@ import nl.roboteamtwente.autoref.model.*;
 import nl.roboteamtwente.proto.StateOuterClass;
 import nl.roboteamtwente.proto.WorldOuterClass;
 import nl.roboteamtwente.proto.WorldRobotOuterClass;
+
 import org.robocup.ssl.proto.SslVisionGeometry;
 
 import java.util.EnumSet;
@@ -283,16 +284,29 @@ public class SSLAutoRef {
             Vector2 p1 = new Vector2(lineSegment.getP1().getX() / 1000.0f, lineSegment.getP1().getY() / 1000.0f);
             Vector2 p2 = new Vector2(lineSegment.getP2().getX() / 1000.0f, lineSegment.getP2().getY() / 1000.0f);
             FieldLine fieldLine = new FieldLine(lineSegment.getName(), p1, p2, lineSegment.getThickness() / 1000.0f);
-            System.out.println(fieldLine);
 
             game.getField().addLine(fieldLine);
         }
 
         // Add extra lines needed for rules around the defense area
         for (Side side : Side.values()) {
+            FieldLine penaltyStretch = game.getField().getLineByName(side.name().substring(0, 1) + side.name().substring(1).toLowerCase() + "PenaltyStretch");
+            // check if p1 or p2 is positive
+            int factor = penaltyStretch.p1().getY() > penaltyStretch.p2().getY() ? 1 : -1;
+
             String linename = side.name().toLowerCase() + "InnerMarginPenaltyStretch";
-            Field line penaltyStretch = game.getField().getLineByName(side.name().toLowerCase() + "PenaltyStretch");
-            FieldLine innerMarginPenaltyStretch = new FieldLine();
+            FieldLine innerMarginPenaltyStretch = new FieldLine(linename, 
+            penaltyStretch.p1().add(new Vector2(side.getCardinality()*0.09f, factor*-0.09f)).roundTo3Decimals(), 
+            penaltyStretch.p2().add(new Vector2(side.getCardinality()*0.09f, factor*0.09f)).roundTo3Decimals(),
+            penaltyStretch.thickness());
+            game.getField().addLine(innerMarginPenaltyStretch);
+
+            linename = side.name().toLowerCase() + "OuterMarginPenaltyStretch";
+            FieldLine outerMarginPenaltyStretch = new FieldLine(linename, 
+            penaltyStretch.p1().add(new Vector2(side.getCardinality()*-0.09f, factor*0.09f)).roundTo3Decimals(), 
+            penaltyStretch.p2().add(new Vector2(side.getCardinality()*-0.09f, factor*-0.09f)).roundTo3Decimals(), 
+            penaltyStretch.thickness());
+            game.getField().addLine(outerMarginPenaltyStretch);
         }
     }
 
@@ -347,9 +361,6 @@ public class SSLAutoRef {
             }
 
             // checks for ball bouncing of robots
-            if (game.isBallInPlay()) {
-                System.out.println("ANGLE: " + angle + "; ball pos: " + ball.getPosition().xy() + "; magnitude: " + ball.getVelocity().xy().magnitude());
-            }
             if (ball.getVelocity().xy().magnitude() > 0.01f && ball.getPosition().getZ() < 0.15f) {
                 for (Robot robot : game.getRobots()) {
                     // case: ball is rolling, robot has velocity in the same direct to try and grab the ball.
