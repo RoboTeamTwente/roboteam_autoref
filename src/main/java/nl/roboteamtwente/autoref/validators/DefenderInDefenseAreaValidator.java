@@ -55,7 +55,7 @@ public class DefenderInDefenseAreaValidator implements RuleValidator {
                 continue;
             }
 
-            if (!game.getField().isFullyInDefenseArea(robot.getTeam().getSide(), robot.getPosition().xy())) {
+            if (!game.getField().isRobotFullyInDefenseArea(robot.getTeam().getSide(), robot.getPosition().xy())) {
                 continue;
             }
 

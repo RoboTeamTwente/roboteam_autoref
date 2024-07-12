@@ -84,9 +84,9 @@ public class Field {
 
     /**
      * @param side side of the field that the check needs to happen on
-     * @param location location of the object
+     * @param location location of the robot
      */
-    public boolean isFullyInDefenseArea(Side side, Vector2 location) {
+    public boolean isRobotFullyInDefenseArea(Side side, Vector2 location) {
         String sideString = side == Side.LEFT ? "Left" : "Right";
 
         FieldLine adjustedPenaltyStretch = getLineByName(sideString + "InnerMarginPenaltyStretch");
@@ -101,9 +101,9 @@ public class Field {
     
     /**
      * @param side side of the field that the check needs to happen on
-     * @param location location of the object
+     * @param location location of the robot
      */
-    public boolean isPartiallyInDefenseArea(Side side, Vector2 location) {
+    public boolean isRobotPartiallyInDefenseArea(Side side, Vector2 location) {
         String sideString = side == Side.LEFT ? "Left" : "Right";
 
         FieldLine adjustedPenaltyStretch = getLineByName(sideString + "OuterMarginPenaltyStretch");
