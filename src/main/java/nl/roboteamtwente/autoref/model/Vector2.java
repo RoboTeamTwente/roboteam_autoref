@@ -104,7 +104,7 @@ public class Vector2 {
      * @return the length of vector.
      */
     public float magnitude() {
-        return ((float) Math.sqrt(this.getX()*this.getX() + this.getY()* this.getY()));
+        return ((float) Math.sqrt(this.getX()*this.getX() + this.getY()*this.getY()));
     }
 
     /**
@@ -134,6 +134,13 @@ public class Vector2 {
      */
     public float angle(Vector2 other) {
         return (float) Math.toDegrees(Math.acos(dotProduct(other) / (magnitude() * other.magnitude())));
+    }
+
+    /**
+     * Round the values of the vector to 3 decimals
+     */
+    public Vector2 roundTo3Decimals() {
+        return new Vector2(Math.round(1000*this.x)/1000.0f, Math.round(1000*this.y)/1000.0f);
     }
 
     /**

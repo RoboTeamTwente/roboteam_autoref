@@ -28,7 +28,7 @@ public class BotKickedBallTooFastValidator implements RuleValidator {
     public RuleViolation validate(Game game) {
         // Ball speed in m/s
         Ball ball = game.getBall();
-        float speed = ball.getVelocity().xy().magnitude();
+        float speed = ball.getVelocity().magnitude();
 
         // If speed in one frame is higher than 6.5 m/s, ball was kicked too fast by the bot.
         if (speed > 6.5) {
